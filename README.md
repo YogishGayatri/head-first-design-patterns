@@ -65,6 +65,23 @@ head-first-design-patterns/
     └── interfaces/                     # Pattern interfaces
         ├── FilterInputStream.hpp       # Abstract decorator base
         └── InputStream.hpp             # Abstract component
+└── Chapter4_Factory/                   # Factory Patterns Implementation
+    ├── abstract_factory/               # Abstract Factory Pattern
+    │   ├── main.cpp                    # Abstract Factory demo
+    │   ├── main                        # Compiled executable
+    │   ├── ChicagoIngredientFactory.hpp # Chicago ingredient factory
+    │   ├── Ingredients.hpp             # Abstract and concrete ingredients
+    │   ├── NYIngredientFactory.hpp     # NY ingredient factory
+    │   ├── Pizza.hpp                   # Pizza classes using factories
+    │   ├── PizzaIngredientFactory.hpp  # Abstract factory interface
+    │   └── PizzaStore.hpp              # Pizza stores with factories
+    └── factory_method/                 # Factory Method Pattern
+        ├── main.cpp                    # Factory Method demo
+        ├── main                        # Compiled executable
+        ├── ChicagoPizzaStore.hpp       # Chicago pizza store
+        ├── NYPizzaStore.hpp            # NY pizza store
+        ├── Pizza.hpp                   # Pizza classes
+        └── PizzaStore.hpp              # Abstract pizza store
 ```
 
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
@@ -219,6 +236,40 @@ This folder contains an additional Decorator Pattern implementation using I/O st
 - Wraps it with a lowercase decorator
 - Reads and displays the decorated output
 
+### 🎯 Chapter 4: Factory Patterns - Pizza Store Application
+
+**Problem**: A pizza franchise needs to create different pizza styles (NY, Chicago) with region-specific ingredients and preparation methods. Initial attempts led to tight coupling and code duplication across stores.
+
+**Solution**: Use Factory patterns to encapsulate object creation. Factory Method lets subclasses decide what to create, while Abstract Factory provides an interface for creating families of related objects.
+
+### 📂 Chapter4_Factory/
+
+#### Factory Method Pattern (`factory_method/`)
+
+**Core Components**
+- **`PizzaStore.hpp`** - Abstract base class with `orderPizza()` template method
+- **`NYPizzaStore.hpp`** - Creates NY-style pizzas (thin crust, marinara, reggiano)
+- **`ChicagoPizzaStore.hpp`** - Creates Chicago-style pizzas (deep dish, plum tomato, mozzarella)
+- **`Pizza.hpp`** - Abstract pizza with prepare/bake/cut/box methods
+
+**Key Method**: `createPizza()` - Factory method overridden by subclasses to create specific pizzas
+
+#### Abstract Factory Pattern (`abstract_factory/`)
+
+**Core Components**
+- **`PizzaIngredientFactory.hpp`** - Abstract factory interface for ingredient creation
+- **`NYIngredientFactory.hpp`** - Creates NY ingredients (ThinCrustDough, MarinaraSauce, ReggianoCheese)
+- **`ChicagoIngredientFactory.hpp`** - Creates Chicago ingredients (ThickCrustDough, PlumTomatoSauce, MozzarellaCheese)
+- **`Ingredients.hpp`** - Abstract ingredient classes (Dough, Sauce, Cheese) with concrete implementations
+- **`Pizza.hpp`** - Pizza classes that use ingredient factories
+- **`PizzaStore.hpp`** - Pizza stores that use ingredient factories
+
+**Key Methods**: `createDough()`, `createSauce()`, `createCheese()` - Abstract factory methods
+
+#### Main Demos
+- **Factory Method**: Each store creates complete pizzas with region-specific styles
+- **Abstract Factory**: Stores use ingredient factories to create pizza components
+
 ### Strategy Pattern Principles
 1. **Encapsulate what varies** - Flying and quacking behaviors vary, so encapsulate them
 2. **Favor composition over inheritance** - Ducks get their behavior via composition
@@ -233,6 +284,11 @@ This folder contains an additional Decorator Pattern implementation using I/O st
 1. **Open for extension, closed for modification** - Add new decorators without changing existing code
 2. **Favor composition over inheritance** - Decorators wrap components via composition
 3. **Classes should be open for extension but closed for modification** - Core principle of the pattern
+
+### Factory Pattern Principles
+1. **Depend on abstractions, not concrete classes** - Factories return abstract types
+2. **Encapsulate object creation** - Hide instantiation details behind factory methods
+3. **Factory Method vs Abstract Factory** - Method for single objects, Factory for object families
 
 ## 🚀 How to Run
 
@@ -262,6 +318,20 @@ g++ -std=c++17 main.cpp -o StarbuzzCoffee
 cd Chapter3_IO_Decorator
 g++ -std=c++17 main.cpp -o DecoratorIO
 ./DecoratorIO
+```
+
+### Factory Method Demo
+```bash
+cd Chapter4_Factory/factory_method
+g++ -std=c++17 main.cpp -o main
+./main
+```
+
+### Abstract Factory Demo
+```bash
+cd Chapter4_Factory/abstract_factory
+g++ -std=c++17 main.cpp -o main
+./main
 ```
 
 ### Bad Design Examples
@@ -302,6 +372,13 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 - **Size Matters**: Decorators can be aware of component state (like beverage size)
 - **Unlimited Layers**: Stack multiple decorators for complex combinations
 - **Domain Agnostic**: Pattern applies to beverages, I/O streams, and other domains
+
+### Factory Patterns
+- **Factory Method**: Subclasses decide which concrete classes to instantiate
+- **Abstract Factory**: Interface for creating families of related objects
+- **Dependency Inversion**: Depend on abstractions, not concrete classes
+- **Encapsulate Creation**: Hide object creation logic behind factory interfaces
+- **Regional Variations**: Easily support different product families (NY vs Chicago styles)
 
 ## 🔧 Technical Details
 
