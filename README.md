@@ -1,6 +1,6 @@
 # Head First Design Patterns - C++ Implementation
 
-This repository contains C++ implementations of the first three chapters from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
+This repository contains C++ implementations of chapters 1 through 5 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
 
 ## 📁 Project Structure Overview
 
@@ -82,6 +82,10 @@ head-first-design-patterns/
         ├── NYPizzaStore.hpp            # NY pizza store
         ├── Pizza.hpp                   # Pizza classes
         └── PizzaStore.hpp              # Abstract pizza store
+└── Chapter5_Singleton/                 # Singleton Pattern Implementation
+    ├── main.cpp                        # Main entry point for Singleton demo
+    ├── ChocolateBoiler                 # Compiled executable
+    └── ChocolateBoiler.hpp             # Singleton Chocolate Boiler class
 ```
 
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
@@ -379,6 +383,34 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 - **Dependency Inversion**: Depend on abstractions, not concrete classes
 - **Encapsulate Creation**: Hide object creation logic behind factory interfaces
 - **Regional Variations**: Easily support different product families (NY vs Chicago styles)
+
+### Singleton Pattern
+- **Single Instance Guarantee**: Ensures exactly one instance exists
+- **Global Access Point**: Provides controlled access to the unique instance
+- **Lazy Initialization**: Instance created only when first requested
+- **Thread Safety**: Must handle concurrent access in multi-threaded environments
+- **Private Constructor**: Prevents external instantiation
+
+### 🎯 Chapter 5: Singleton Pattern - Chocolate Boiler Application
+
+**Problem**: A chocolate factory needs a boiler that can only exist in one instance to prevent hazardous duplication. Multiple boiler instances could lead to unsafe operating conditions.
+
+**Solution**: Use the Singleton Pattern to ensure a class has only one instance and provide a global point of access to it.
+
+### 📂 Chapter5_Singleton/
+
+#### Core Components
+
+**`ChocolateBoiler.hpp`** - The Singleton Class
+- Private constructor prevents direct instantiation
+- Static `getInstance()` method provides global access point
+- Ensures only one boiler instance exists throughout the application
+- Manages boiler state (empty, filled, boiled, drained)
+
+#### Main Demo (`main.cpp`)
+- Demonstrates singleton behavior by attempting multiple instantiations
+- Shows that all references point to the same instance
+- Tests boiler operations (fill, boil, drain) in sequence
 
 ## 🔧 Technical Details
 
