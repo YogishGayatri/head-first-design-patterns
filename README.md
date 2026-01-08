@@ -1,6 +1,6 @@
 # Head First Design Patterns - C++ Implementation
 
-This repository contains C++ implementations of chapters 1 through 5 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
+This repository contains C++ implementations of chapters 1 through 6 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
 
 ## 📁 Project Structure Overview
 
@@ -86,6 +86,22 @@ head-first-design-patterns/
     ├── main.cpp                        # Main entry point for Singleton demo
     ├── ChocolateBoiler                 # Compiled executable
     └── ChocolateBoiler.hpp             # Singleton Chocolate Boiler class
+└── Chapter6_Command/                   # Command Pattern Implementation
+    ├── main.cpp                        # Main entry point for Command demo
+    ├── README.md                       # Chapter-specific documentation
+    ├── commands/                       # Concrete command implementations
+    │   ├── CeilingFanCommands.hpp
+    │   ├── LightCommands.hpp
+    │   ├── MacroCommand.hpp
+    │   └── StereoCommands.hpp
+    ├── interfaces/                     # Pattern interfaces
+    │   └── Command.hpp
+    ├── invoker/                        # Invoker implementation
+    │   └── RemoteControl.hpp
+    └── receivers/                      # Receiver classes (devices)
+        ├── CeilingFan.hpp
+        ├── Light.hpp
+        └── Stereo.hpp
 ```
 
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
@@ -411,6 +427,42 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 - Demonstrates singleton behavior by attempting multiple instantiations
 - Shows that all references point to the same instance
 - Tests boiler operations (fill, boil, drain) in sequence
+
+### 🎯 Chapter 6: Command Pattern - Remote Control Application
+
+**Problem**: A remote control needs to execute various commands for different devices, support undo operations, and allow for macro commands. Initial implementations would require the remote to know about each device's specific methods, creating tight coupling.
+
+**Solution**: Use the Command Pattern to encapsulate requests as objects, allowing parameterization of clients with different requests, queuing, logging, and undoable operations.
+
+### 📂 Chapter6_Command/
+
+#### Core Components
+
+**`interfaces/Command.hpp`** - Command Interface
+- Defines `execute()` and `undo()` methods
+- Includes `NoCommand` for empty slots
+
+**`invoker/RemoteControl.hpp`** - The Invoker
+- Stores on/off commands for 7 slots
+- Implements button press methods that delegate to commands
+- Maintains undo command for rollback operations
+
+**`commands/`** - Concrete Commands
+- **`LightCommands.hpp`** - Light on/off commands
+- **`StereoCommands.hpp`** - Stereo on/off commands with CD
+- **`CeilingFanCommands.hpp`** - Ceiling fan speed control commands
+- **`MacroCommand.hpp`** - Composite command for executing multiple commands
+
+**`receivers/`** - Receiver Classes
+- **`Light.hpp`** - Light device with on/off methods
+- **`Stereo.hpp`** - Stereo device with on/off/CD methods
+- **`CeilingFan.hpp`** - Ceiling fan with speed control
+
+#### Main Demo (`main.cpp`)
+- Sets up remote control with various device commands
+- Demonstrates command execution and undo functionality
+- Shows macro command usage for party mode
+- Includes lambda command adapter for modern C++ flexibility
 
 ## 🔧 Technical Details
 
