@@ -1,6 +1,6 @@
 # Head First Design Patterns - C++ Implementation
 
-This repository contains C++ implementations of chapters 1 through 6 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
+This repository contains C++ implementations of chapters 1 through 7 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
 
 ## 📁 Project Structure Overview
 
@@ -102,7 +102,20 @@ head-first-design-patterns/
         ├── CeilingFan.hpp
         ├── Light.hpp
         └── Stereo.hpp
-```
+└── Chapter7_AdapterFacade/               # Adapter and Facade Patterns Implementation
+    ├── Adapter/                         # Adapter Pattern
+    │   ├── main.cpp                     # Main entry point for Adapter demo
+    │   ├── Duck.hpp                     # Duck interface and implementation
+    │   ├── Turkey.hpp                   # Turkey class
+    │   └── TurkeyAdapter.hpp            # Adapter to make Turkey behave like Duck
+    ├── Facade/                          # Facade Pattern
+    │   ├── main.cpp                     # Main entry point for Facade demo
+    │   ├── Facade                       # Compiled executable
+    │   ├── Components.hpp               # Home theater components
+    │   └── HomeTheaterFacade.hpp        # Facade for home theater system
+    └── PrincipleOfLeastKnowledge/       # Principle of Least Knowledge Demo
+        ├── BadCar.cpp                   # Violation of the principle
+        └── GoodCar.cpp                  # Proper application of the principle
 
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
 
@@ -464,7 +477,56 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 - Shows macro command usage for party mode
 - Includes lambda command adapter for modern C++ flexibility
 
-## 🔧 Technical Details
+## 🎯 Chapter 7: Adapter and Facade Patterns - Duck Simulator and Home Theater
+
+**Problem**: Need to integrate incompatible interfaces (Adapter) and simplify complex subsystem interactions (Facade).
+
+**Solution**: Use Adapter Pattern to make incompatible classes work together, and Facade Pattern to provide a unified interface to a complex subsystem.
+
+### 📂 Chapter7_AdapterFacade/
+
+#### Adapter Pattern (`Adapter/`)
+
+**Problem**: A duck simulator needs to work with turkey objects, but their interfaces are incompatible.
+
+**Solution**: Create an adapter that translates turkey methods to duck methods.
+
+**`Duck.hpp`** - Target interface (what the client expects)
+- Defines `quack()` and `fly()` methods
+
+**`Turkey.hpp`** - Adaptee (what we have)
+- Defines `gobble()` and `fly()` methods (fly is short distance)
+
+**`TurkeyAdapter.hpp`** - Adapter class
+- Inherits from Duck, contains Turkey instance
+- Translates `quack()` to `gobble()`, `fly()` to multiple short flights
+
+#### Facade Pattern (`Facade/`)
+
+**Problem**: A home theater system has many components (amplifier, tuner, projector, etc.) with complex interactions.
+
+**Solution**: Provide a facade that offers simple methods like `watchMovie()` and `endMovie()`.
+
+**`Components.hpp`** - Subsystem components
+- Amplifier, Tuner, Projector, TheaterLights, Screen, PopcornPopper classes
+
+**`HomeTheaterFacade.hpp`** - Facade class
+- Contains instances of all components
+- Provides high-level methods that coordinate multiple components
+
+#### Principle of Least Knowledge (`PrincipleOfLeastKnowledge/`)
+
+**Problem**: Objects should only communicate with their immediate friends, not reach through objects.
+
+**`BadCar.cpp`** - Violation example
+- Car directly accesses engine's carburetor methods
+
+**`GoodCar.cpp`** - Proper application
+- Car only calls engine methods, engine handles carburetor
+
+#### Main Demos
+- **Adapter**: Tests duck and turkey adapter behavior
+- **Facade**: Simulates watching a movie with simple facade calls
 
 - **Language**: C++17
 - **Memory Management**: Uses smart pointers (`std::unique_ptr`) for automatic memory management
