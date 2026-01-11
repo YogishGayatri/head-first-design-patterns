@@ -1,6 +1,6 @@
 # Head First Design Patterns - C++ Implementation
 
-This repository contains C++ implementations of chapters 1 through 9 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
+This repository contains C++ implementations of chapters 1 through 10 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
 
 ## 📁 Project Structure Overview
 
@@ -139,6 +139,21 @@ head-first-design-patterns/
         ├── MenuItem.hpp                # Leaf component (individual menu items)
         ├── Menu.hpp                    # Composite component (menus containing items/sub-menus)
         └── Waitress.hpp                # Client traversing the composite structure
+└── Chapter10_State/                    # State Pattern Implementation
+    ├── BadDesign/                      # Anti-pattern example
+    │   └── BadGumballMachine.cpp       # Monolithic state handling
+    └── StatePatternDesign/             # Proper State Pattern implementation
+        ├── main.cpp                    # Main entry point for State demo
+        ├── statepattern                # Compiled executable
+        ├── GumballMachine.cpp          # Context class
+        ├── GumballMachine.hpp          # Context header
+        ├── State.hpp                   # State interface
+        └── ConcreteStates/             # Concrete state implementations
+            ├── HasQuarterState.hpp
+            ├── NoQuarterState.hpp
+            ├── SoldOutState.hpp
+            ├── SoldState.hpp
+            └── WinnerState.hpp
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
 
 **Problem**: A duck simulation game needs different duck types with varying flying and quacking behaviors. Initial attempts using inheritance and interfaces led to code duplication and inflexibility.
@@ -696,6 +711,41 @@ g++ -std=c++17 main.cpp -o Iterator
 cd ../Composite
 g++ -std=c++17 main.cpp -o Composite
 ./Composite
+```
+
+## 🎯 Chapter 10: State Pattern - Gumball Machine Application
+
+**Problem**: A gumball machine has complex state-dependent behavior (insert quarter, turn crank, dispense, refill, etc.) that was initially handled with conditional statements in a single class, leading to rigid and error-prone code.
+
+**Solution**: The State Pattern encapsulates each state as a separate class with its own behavior, allowing the context (GumballMachine) to delegate actions to the current state object. States can transition to other states, making the system extensible and maintainable.
+
+### 📂 Chapter10_State/
+
+#### Core Components
+
+**`State.hpp`** - State Interface
+- Defines virtual methods for all state-dependent actions: [`insertQuarter()`](Chapter10_State/StatePatternDesign/State.hpp), [`ejectQuarter()`](Chapter10_State/StatePatternDesign/State.hpp), [`turnCrank()`](Chapter10_State/StatePatternDesign/State.hpp), [`dispense()`](Chapter10_State/StatePatternDesign/State.hpp)
+
+**`GumballMachine.hpp`** - Context Class
+- Holds the current state and gumball count
+- Delegates actions to the current state via [`setState()`](Chapter10_State/StatePatternDesign/GumballMachine.hpp) and [`getState()`](Chapter10_State/StatePatternDesign/GumballMachine.hpp)
+- Provides actions like [`insertQuarter()`](Chapter10_State/StatePatternDesign/GumballMachine.hpp), [`turnCrank()`](Chapter10_State/StatePatternDesign/GumballMachine.hpp), [`refill()`](Chapter10_State/StatePatternDesign/GumballMachine.hpp)
+
+**Concrete States** (`ConcreteStates/`)
+- **`NoQuarterState.hpp`**: Handles quarter insertion, rejects other actions
+- **`HasQuarterState.hpp`**: Accepts crank turning, transitions to SoldState or WinnerState (10% chance)
+- **`SoldState.hpp`**: Dispenses gumball, transitions to NoQuarterState or SoldOutState
+- **`SoldOutState.hpp`**: Rejects all actions except refill
+- **`WinnerState.hpp`**: Dispenses two gumballs for winner, then transitions appropriately
+
+#### Main Demo
+- **State Demo** (`StatePatternDesign/main.cpp`): Simulates gumball machine usage, testing winner state (10% chance), and refill functionality.
+
+### How to Run State Demo
+```bash
+cd Chapter10_State/StatePatternDesign
+g++ -std=c++17 main.cpp GumballMachine.cpp -o statepattern
+./statepattern
 ```
 
 - **Language**: C++17
