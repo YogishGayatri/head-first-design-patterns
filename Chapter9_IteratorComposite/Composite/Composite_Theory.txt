@@ -1,0 +1,45 @@
+================================================================================
+THE PROBLEM: Sub-Menus and Trees
+================================================================================
+Scenario:
+The Diner wants to add a "Dessert Menu". 
+But the "Dessert Menu" isn't a separate book; it is a section INSIDE the Diner Menu.
+
+If we stick to the old design, we have a messy nested loop structure:
+- Main Menu
+  - Breakfast (Menu)
+  - Lunch (Menu)
+    - Dessert (Sub-Menu) <-- How do we handle this without checking "instanceof"?
+
+The old Iterator pattern struggles here because it assumes a flat list. 
+We need a "Tree" structure.
+
+================================================================================
+THE SOLUTION: The Composite Pattern
+================================================================================
+Concept:
+The "Part-Whole" Hierarchy. We want to treat individual objects (Leafs) and 
+groups of objects (Nodes) EXACTLY THE SAME.
+
+1.  **The Component Interface:** We create a common abstract class (`MenuComponent`) that both `MenuItem` and `Menu` inherit from.
+    It has methods like:
+    - `print()`
+    - `add()`
+    - `remove()`
+    - `getChild()`
+
+2.  **The Leaf (`MenuItem`):**
+    Implements `print()` to show its name/price.
+    Throws errors if you try to `add()` to it (you can't add a child to a burger).
+
+3.  **The Composite (`Menu`):**
+    Implements `print()` by RECURSIVELY calling `print()` on all its children.
+    Implements `add()` to store children in a list.
+
+The Magic:
+The Waitress code becomes incredibly simple:
+    allMenus->print();
+
+She calls print ONCE on the top-level menu. That menu prints itself, then tells 
+all its children to print. If a child is a sub-menu, it tells ITs children to print.
+The recursion handles the entire tree automatically.

@@ -1,0 +1,53 @@
+================================================================================
+THE PROBLEM: The Tale of Two Menus
+================================================================================
+Scenario:
+You are building a system for a merged restaurant.
+1.  **Lou (Pancake House):** Stores his menu items in an `std::vector` (Dynamic List).
+2.  **Mel (Diner):** Stores his menu items in a `MenuItem[]` (Fixed Array).
+
+The Consequence (The "Waitress" Problem):
+The Client (Waitress) wants to print all items from both menus.
+
+Without the Iterator Pattern, the code looks like this:
+
+    // 1. Loop for Lou (Vector)
+    for (int i = 0; i < louMenu.size(); i++) {
+        print(louMenu.get(i));
+    }
+
+    // 2. Loop for Mel (Array)
+    // We have to know the array size and check for nulls!
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (melMenu[i] != nullptr) {
+            print(melMenu[i]);
+        }
+    }
+
+Why this fails Design Principles:
+1.  **Violation of Encapsulation:** The Waitress knows EXACTLY how Lou and Mel store their data.
+2.  **Violation of Open/Closed:** If we buy a Cafe that uses a `HashMap`, we have to open the Waitress code and write a THIRD loop.
+
+================================================================================
+THE SOLUTION: The Iterator Pattern
+================================================================================
+Concept:
+We encapsulate the "Traversal" (the act of looping) into a separate object.
+
+1.  We create a common interface called `Iterator`:
+    * `hasNext()`: Is there another item?
+    * `next()`: Give me the next item.
+
+2.  Each Menu creates its own specific Iterator:
+    * `PancakeIterator`: Knows how to step through a Vector.
+    * `DinerIterator`: Knows how to step through an Array (and skip nulls).
+
+3.  The Waitress (Client):
+    She doesn't know about Vectors or Arrays anymore. She just talks to the Iterator interface.
+
+    while (iterator.hasNext()) {
+        print(iterator.next());
+    }
+
+Result:
+We can now add 50 new menus with 50 different data structures, and the Waitress code NEVER changes.

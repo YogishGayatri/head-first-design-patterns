@@ -1,6 +1,6 @@
 # Head First Design Patterns - C++ Implementation
 
-This repository contains C++ implementations of chapters 1 through 7 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
+This repository contains C++ implementations of chapters 1 through 9 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
 
 ## 📁 Project Structure Overview
 
@@ -116,7 +116,29 @@ head-first-design-patterns/
     └── PrincipleOfLeastKnowledge/       # Principle of Least Knowledge Demo
         ├── BadCar.cpp                   # Violation of the principle
         └── GoodCar.cpp                  # Proper application of the principle
-
+└── Chapter8_Template/                  # Template Method Pattern Implementation
+    ├── SortHookExample/                # Sorting with hooks example
+    │   └── sort.cpp                    # Sorting algorithm with customizable hooks
+    └── TeaCoffeeExample/               # Caffeine beverage preparation
+        ├── CaffeineBeverage.hpp        # Abstract template method class
+        ├── Coffee.hpp                  # Concrete coffee implementation
+        ├── main.cpp                    # Main entry point for Template demo
+        ├── Tea.hpp                     # Concrete tea implementation
+        └── TeaCoffeeExample            # Compiled executable
+└── Chapter9_IteratorComposite/         # Iterator and Composite Patterns Implementation
+    ├── Iterator/                       # Iterator Pattern
+    │   ├── main.cpp                    # Main entry point for Iterator demo
+    │   ├── Iterator                    # Compiled executable
+    │   ├── Iterator.hpp                # Iterator interface
+    │   ├── Menu.hpp                    # Menu interface and implementations
+    │   └── Waitress.hpp                # Client using iterators
+    └── Composite/                      # Composite Pattern
+        ├── main.cpp                    # Main entry point for Composite demo
+        ├── Composite                   # Compiled executable
+        ├── MenuComponent.hpp           # Abstract component (leaf and composite)
+        ├── MenuItem.hpp                # Leaf component (individual menu items)
+        ├── Menu.hpp                    # Composite component (menus containing items/sub-menus)
+        └── Waitress.hpp                # Client traversing the composite structure
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
 
 **Problem**: A duck simulation game needs different duck types with varying flying and quacking behaviors. Initial attempts using inheritance and interfaces led to code duplication and inflexibility.
@@ -385,6 +407,27 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 ./rigid_beverage
 ```
 
+### Template Method Demo
+```bash
+cd Chapter8_Template/TeaCoffeeExample
+g++ -std=c++17 main.cpp -o TeaCoffeeExample
+./TeaCoffeeExample
+```
+
+### Iterator Demo
+```bash
+cd Chapter9_IteratorComposite/Iterator
+g++ -std=c++17 main.cpp -o Iterator
+./Iterator
+```
+
+### Composite Demo
+```bash
+cd Chapter9_IteratorComposite/Composite
+g++ -std=c++17 main.cpp -o Composite
+./Composite
+```
+
 ## 📚 Key Learning Points
 
 ### Strategy Pattern
@@ -419,6 +462,27 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 - **Lazy Initialization**: Instance created only when first requested
 - **Thread Safety**: Must handle concurrent access in multi-threaded environments
 - **Private Constructor**: Prevents external instantiation
+
+### Template Method Pattern
+- **Algorithm Skeleton**: Defines the structure of an algorithm in a base class
+- **Subclass Customization**: Allows subclasses to override specific steps
+- **Inversion of Control**: Base class controls the flow, subclasses provide details
+- **Hooks for Extension**: Optional methods that subclasses can override for customization
+- **Code Reuse**: Common algorithm structure shared across implementations
+
+### Iterator Pattern
+- **Sequential Access**: Provides a way to access elements without exposing underlying structure
+- **Polymorphic Traversal**: Same interface for iterating over different collections
+- **Encapsulate Iteration**: Hide the details of traversing a collection
+- **Single Responsibility**: Iterators handle traversal, collections handle storage
+- **Fail-Fast Behavior**: Detect concurrent modifications during iteration
+
+### Composite Pattern
+- **Tree Structures**: Represent part-whole hierarchies uniformly
+- **Recursive Composition**: Composites contain leaves and other composites
+- **Transparent Operations**: Clients treat leaves and composites the same way
+- **Add/Remove Dynamically**: Build complex structures at runtime
+- **Shared Interface**: All components implement the same abstract interface
 
 ### 🎯 Chapter 5: Singleton Pattern - Chocolate Boiler Application
 
@@ -527,6 +591,112 @@ g++ -std=c++17 RigidBeverage.cpp -o rigid_beverage
 #### Main Demos
 - **Adapter**: Tests duck and turkey adapter behavior
 - **Facade**: Simulates watching a movie with simple facade calls
+
+### 🎯 Chapter 8: Template Method Pattern - Beverage and Sorting Applications
+
+**Problem**: Algorithms often have a fixed structure with customizable steps. For example, preparing caffeine beverages (coffee/tea) follows the same process but differs in brewing and condiment addition. Sorting algorithms can have optional hooks for customization.
+
+**Solution**: Use the Template Method Pattern to define the skeleton of an algorithm in a base class, allowing subclasses to override specific steps without changing the overall structure. Hooks provide optional extension points.
+
+### 📂 Chapter8_Template/
+
+#### TeaCoffeeExample/ - Caffeine Beverage Preparation
+
+**Core Components**
+
+**`CaffeineBeverage.hpp`** - Abstract Template Class
+- Defines the template method [`prepareRecipe()`](Chapter8_Template/TeaCoffeeExample/CaffeineBeverage.hpp) with fixed algorithm steps
+- Includes abstract methods [`brew()`](Chapter8_Template/TeaCoffeeExample/CaffeineBeverage.hpp) and [`addCondiments()`](Chapter8_Template/TeaCoffeeExample/CaffeineBeverage.hpp) for subclass implementation
+- Provides hook method [`customerWantsCondiments()`](Chapter8_Template/TeaCoffeeExample/CaffeineBeverage.hpp) with default implementation
+
+**`Coffee.hpp`** - Concrete Coffee Class
+- Implements [`brew()`](Chapter8_Template/TeaCoffeeExample/Coffee.hpp) (dripping coffee through filter)
+- Implements [`addCondiments()`](Chapter8_Template/TeaCoffeeExample/Coffee.hpp) (adding sugar and milk)
+- Overrides hook to ask user if they want condiments
+
+**`Tea.hpp`** - Concrete Tea Class
+- Implements [`brew()`](Chapter8_Template/TeaCoffeeExample/Tea.hpp) (steeping tea bag)
+- Implements [`addCondiments()`](Chapter8_Template/TeaCoffeeExample/Tea.hpp) (adding lemon)
+- Uses default hook behavior
+
+#### SortHookExample/ - Sorting with Hooks
+
+**Core Components**
+
+**`sort.cpp`** - Sorting Algorithm with Hooks
+- Demonstrates template method for sorting with customizable comparison and processing hooks
+- Shows how hooks allow optional customization without subclassing
+
+#### Main Demo (`TeaCoffeeExample/main.cpp`)
+- Creates coffee and tea objects
+- Calls [`prepareRecipe()`](Chapter8_Template/TeaCoffeeExample/CaffeineBeverage.hpp) on each, demonstrating the template method
+- Shows how the algorithm structure is fixed but steps are customized
+
+### How to Run Template Method Demo
+```bash
+cd Chapter8_Template/TeaCoffeeExample
+g++ -std=c++17 main.cpp -o TeaCoffeeExample
+./TeaCoffeeExample
+```
+
+### 🎯 Chapter 9: Iterator and Composite Patterns - Menu System Application
+
+**Problem**: A restaurant system needs to iterate over menu items from different menus (Iterator) and handle hierarchical menu structures where menus can contain sub-menus and items (Composite), without exposing internal details or creating tight coupling.
+
+**Solution**: The Iterator Pattern provides a uniform way to traverse collections. The Composite Pattern allows treating individual items and groups (menus) as a single component, enabling recursive operations like printing entire menu hierarchies.
+
+### 📂 Chapter9_IteratorComposite/
+
+#### Iterator Pattern (`Iterator/`)
+
+**Core Components**
+
+**`Iterator.hpp`** - Iterator Interface
+- Defines [`hasNext()`](Chapter9_IteratorComposite/Iterator/Iterator.hpp) and [`next()`](Chapter9_IteratorComposite/Iterator/Iterator.hpp) methods for traversal
+
+**`Menu.hpp`** - Menu Interface and Implementations
+- Abstract [`Menu`](Chapter9_IteratorComposite/Iterator/Menu.hpp) class with [`createIterator()`](Chapter9_IteratorComposite/Iterator/Menu.hpp) method
+- Concrete menus (e.g., PancakeHouseMenu, DinerMenu) implement different storage (arrays, vectors) but provide iterators
+
+**`Waitress.hpp`** - Client Using Iterators
+- Uses [`createIterator()`](Chapter9_IteratorComposite/Iterator/Menu.hpp) to get iterators from menus
+- Prints menus using a single loop via [`printMenu(Iterator*)`](Chapter9_IteratorComposite/Iterator/Waitress.hpp), demonstrating polymorphism
+
+#### Composite Pattern (`Composite/`)
+
+**Core Components**
+
+**`MenuComponent.hpp`** - Abstract Component
+- Defines common interface for leaves and composites, including [`print()`](Chapter9_IteratorComposite/Composite/MenuComponent.hpp), [`add()`](Chapter9_IteratorComposite/Composite/MenuComponent.hpp), [`remove()`](Chapter9_IteratorComposite/Composite/MenuComponent.hpp), and [`getChild()`](Chapter9_IteratorComposite/Composite/MenuComponent.hpp)
+- Default implementations throw exceptions for unsupported operations
+
+**`MenuItem.hpp`** - Leaf Component
+- Represents individual menu items with [`print()`](Chapter9_IteratorComposite/Composite/MenuItem.hpp) method
+- Implements leaf-specific behavior (e.g., no children)
+
+**`Menu.hpp`** - Composite Component
+- Represents menus that can contain items or sub-menus
+- Implements [`add()`](Chapter9_IteratorComposite/Composite/Menu.hpp), [`remove()`](Chapter9_IteratorComposite/Composite/Menu.hpp), and recursive [`print()`](Chapter9_IteratorComposite/Composite/Menu.hpp) to traverse children
+
+**`Waitress.hpp`** - Client Traversing Composites
+- Calls [`print()`](Chapter9_IteratorComposite/Composite/Waitress.hpp) on the root menu component, which recursively prints the entire hierarchy
+
+#### Main Demos
+- **Iterator Demo** (`Iterator/main.cpp`): Creates menus and a [`Waitress`](Chapter9_IteratorComposite/Iterator/Waitress.hpp) client to iterate and print items without knowing menu internals.
+- **Composite Demo** (`Composite/main.cpp`): Builds a hierarchical menu structure and uses [`Waitress`](Chapter9_IteratorComposite/Composite/Waitress.hpp) to print the entire tree uniformly.
+
+### How to Run Iterator and Composite Demos
+```bash
+# Iterator Demo
+cd Chapter9_IteratorComposite/Iterator
+g++ -std=c++17 main.cpp -o Iterator
+./Iterator
+
+# Composite Demo
+cd ../Composite
+g++ -std=c++17 main.cpp -o Composite
+./Composite
+```
 
 - **Language**: C++17
 - **Memory Management**: Uses smart pointers (`std::unique_ptr`) for automatic memory management
