@@ -1,6 +1,6 @@
 # Head First Design Patterns - C++ Implementation
 
-This repository contains C++ implementations of chapters 1 through 10 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
+This repository contains C++ implementations of chapters 1 through 11 from the "Head First Design Patterns" book by Eric Freeman and Elisabeth Robson. Each chapter demonstrates a specific design pattern through a practical example, showing both problematic approaches and elegant solutions. Chapter 3 includes both a coffee shop condiment system and an I/O stream decoration example.
 
 ## 📁 Project Structure Overview
 
@@ -154,6 +154,18 @@ head-first-design-patterns/
             ├── SoldOutState.hpp
             ├── SoldState.hpp
             └── WinnerState.hpp
+└── Chapter11_Proxy/                    # Proxy Pattern Implementation
+    ├── DynamicProxy/                   # Dynamic Proxy with access control
+    │   ├── main.cpp                    # Main entry point for Dynamic Proxy demo
+    │   ├── handlers/                   # Proxy handlers
+    │   ├── impl/                       # Real subject implementations
+    │   ├── interfaces/                 # Pattern interfaces
+    │   └── proxies/                    # Proxy implementations
+    └── SimpleProxyLike/                # Simple Proxy examples
+        ├── EnforcedProxy               # Compiled executable for enforced proxy
+        ├── EnforcedProxy.cpp           # Access control proxy example
+        ├── Proxymain.cpp               # Simple logging proxy example
+        └── SimpleProxy                 # Compiled executable for simple proxy
 ## 🎯 Chapter 1: Strategy Pattern - SimUDuck Application
 
 **Problem**: A duck simulation game needs different duck types with varying flying and quacking behaviors. Initial attempts using inheritance and interfaces led to code duplication and inflexibility.
@@ -443,6 +455,30 @@ g++ -std=c++17 main.cpp -o Composite
 ./Composite
 ```
 
+### State Demo
+```bash
+cd Chapter10_State/StatePatternDesign
+g++ -std=c++17 main.cpp GumballMachine.cpp -o statepattern
+./statepattern
+```
+
+### Proxy Demos
+```bash
+# Simple Logging Proxy
+cd Chapter11_Proxy/SimpleProxyLike
+g++ -std=c++17 Proxymain.cpp -o SimpleProxy
+./SimpleProxy
+
+# Enforced Access Control Proxy
+g++ -std=c++17 EnforcedProxy.cpp -o EnforcedProxy
+./EnforcedProxy
+
+# Dynamic Proxy
+cd ../DynamicProxy
+g++ -std=c++17 main.cpp -o DynamicProxy
+./DynamicProxy
+```
+
 ## 📚 Key Learning Points
 
 ### Strategy Pattern
@@ -498,6 +534,20 @@ g++ -std=c++17 main.cpp -o Composite
 - **Transparent Operations**: Clients treat leaves and composites the same way
 - **Add/Remove Dynamically**: Build complex structures at runtime
 - **Shared Interface**: All components implement the same abstract interface
+
+### State Pattern
+- **State Encapsulation**: Each state becomes a separate class with its own behavior
+- **Context Delegation**: Context delegates state-specific work to current state object
+- **State Transitions**: States can trigger transitions to other states
+- **Eliminate Conditionals**: Replace complex if-else chains with polymorphism
+- **Open for Extension**: Add new states without modifying existing code
+
+### Proxy Pattern
+- **Access Control**: Control access to sensitive or expensive resources
+- **Lazy Initialization**: Create expensive objects only when needed (Virtual Proxy)
+- **Remote Access**: Provide local interface to remote objects
+- **Logging and Monitoring**: Intercept requests for auditing or debugging
+- **Transparent Substitution**: Client code works with proxy or real object identically
 
 ### 🎯 Chapter 5: Singleton Pattern - Chocolate Boiler Application
 
@@ -740,6 +790,65 @@ g++ -std=c++17 main.cpp -o Composite
 
 #### Main Demo
 - **State Demo** (`StatePatternDesign/main.cpp`): Simulates gumball machine usage, testing winner state (10% chance), and refill functionality.
+
+### 🎯 Chapter 11: Proxy Pattern - Internet Access and Person Profile Applications
+
+**Problem**: Need to control access to expensive or sensitive resources, add logging/monitoring, or provide virtual access to remote objects without changing client code.
+
+**Solution**: Use the Proxy Pattern to provide a surrogate or placeholder for another object to control access to it. The proxy acts as an intermediary, intercepting requests and potentially adding behavior before delegating to the real object.
+
+### 📂 Chapter11_Proxy/
+
+#### Simple Proxy Examples (`SimpleProxyLike/`)
+
+**Simple Logging Proxy** (`Proxymain.cpp`)
+- **`InternetService`** - Subject interface defining the contract
+- **`RealInternet`** - Real subject that performs actual work (simulated internet connection)
+- **`ProxyInternet`** - Proxy that adds logging before delegating to real internet
+- Demonstrates basic interception and delegation
+
+**Enforced Access Control Proxy** (`EnforcedProxy.cpp`)
+- **`Internet`** - Subject interface
+- **`RealInternet`** - Real subject with private constructor (enforced singleton-like access)
+- **`ProxyInternet`** - Proxy that controls access, blocks banned sites, and manages real internet lifecycle
+- Shows how proxy can enforce security policies and control object creation
+
+#### Dynamic Proxy with Access Control (`DynamicProxy/`)
+
+**Core Components**
+- **`PersonBean`** - Subject interface for person profiles
+- **`PersonBeanImpl`** - Real subject implementation
+- **`ProxyFactory`** - Factory creating different proxy types based on access level
+- **Owner Proxy**: Allows self-modification but prevents self-rating
+- **Non-Owner Proxy**: Allows rating others but prevents modifying their profile
+
+**Key Features**
+- Dynamic proxy creation based on user permissions
+- Fine-grained access control (read/write restrictions)
+- Transparent interception of method calls
+- Separation of concerns between real object and access logic
+
+#### Main Demos
+- **Simple Proxy**: Demonstrates logging and basic interception
+- **Enforced Proxy**: Shows access control and resource protection
+- **Dynamic Proxy**: Illustrates role-based access control for social features
+
+### How to Run Proxy Demos
+```bash
+# Simple Logging Proxy
+cd Chapter11_Proxy/SimpleProxyLike
+g++ -std=c++17 Proxymain.cpp -o SimpleProxy
+./SimpleProxy
+
+# Enforced Access Control Proxy
+g++ -std=c++17 EnforcedProxy.cpp -o EnforcedProxy
+./EnforcedProxy
+
+# Dynamic Proxy
+cd ../DynamicProxy
+g++ -std=c++17 main.cpp -o DynamicProxy
+./DynamicProxy
+```
 
 ### How to Run State Demo
 ```bash
