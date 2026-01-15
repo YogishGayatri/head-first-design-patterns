@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head><style>body{font-family:sans-serif; padding:30px; background:#333; color:white;} .box{border:2px solid orange; padding:20px; border-radius:10px;}</style></head>
+<body>
+    <div class="box">
+        <h2>3D Model Viewer (Adapter Pattern)</h2>
+        <h1 id="display">Waiting...</h1>
+        <input type="range" id="slider" min="0" max="1000" style="width:100%">
+    </div>
+    <script>
+        window.viewType = '3d';
+        
+    const slider = document.getElementById('slider');
+    const display = document.getElementById('display');
+    let isDragging = false;
+
+    // 1. Handle Dragging (Don't update from server while I am dragging)
+    slider.addEventListener('mousedown', () => { isDragging = true; });
+    slider.addEventListener('mouseup', () => { 
+        isDragging = false; 
+        // Force an immediate fetch to sync nicely
+        fetchUpdate(); 
+    });
+
+    // 2. Controller: Send data on Input (Continuous or Release)
+    slider.addEventListener('input', () => {
+        // Send updates immediately for smooth feel on OTHER window
+        fetch(`/set_layer?val=${slider.value}`);
+        updateText(slider.value); // Optimistic UI update
+    });
+
+    function updateText(layer, height = null) {
+        if(window.viewType === 'image') {
+            display.innerText = `Layer: ${layer} | Image: slice_${layer}.png`;
+        } else {
+            // If we don't have height yet, wait for server
+            if(height !== null) display.innerText = `Z-Height: ${height.toFixed(2)} mm`;
+        }
+    }
+
+    function fetchUpdate() {
+        // Anti-Cache: Add timestamp to prevent browser from reusing old data
+        fetch('/get_state?t=' + Date.now())
+            .then(res => res.json())
+            .then(data => {
+                // Only update slider if I am NOT dragging it
+                if (!isDragging) {
+                    if(Math.abs(slider.value - data.layer) > 0) {
+                        slider.value = data.layer;
+                    }
+                }
+                // ALWAYS update the text/visuals
+                updateText(data.layer, data.height);
+            });
+    }
+
+    // Poll every 100ms for fast interaction
+    setInterval(fetchUpdate, 100);
+
+    </script>
+</body>
+</html>
